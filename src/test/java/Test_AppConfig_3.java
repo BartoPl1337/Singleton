@@ -3,7 +3,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class Test_AppConfig_3 {
-    /*
+    
     @Test
     void test_getInstance_returns_instance() {
         Assertions.assertNotNull(AppConfig.getInstance());
@@ -29,5 +29,4 @@ public class Test_AppConfig_3 {
         c.set("mode", "dark");
         Assertions.assertEquals("dark", c.get("mode"));
     }
-    //*/
 }
