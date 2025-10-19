@@ -1,7 +1,9 @@
 package edu.io;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.yaml.snakeyaml.Yaml;
+
+import java.io.*;
+import java.util.*;
 
 public class AppConfig {
     private static AppConfig appConfig = new AppConfig();
@@ -21,5 +23,44 @@ public class AppConfig {
 
     public Object get(String name) {
         return mode.get(name);
+    }
+
+    public <T> T get(String name, Class<T> secondClass) {
+        Object value = mode.get(name);
+        if (value == null) {
+            return null;
+        }
+        if (!secondClass.isInstance(value)) {
+            throw new ClassCastException("Błąd");
+        }
+        return secondClass.cast(value);
+    }
+
+    public void load(String path) {
+        File file = new File(path);
+        if (!file.exists()) {
+            System.out.println("Nie ma takiego pliku");
+        }
+
+
+        try (FileInputStream fis = new FileInputStream(file)) {
+            Yaml yaml = new Yaml();
+            Map<String, Object> x = yaml.load(fis);
+            if (x != null) {
+                mode.clear();
+                mode.putAll(x);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void save(String path) {
+        Yaml yaml = new Yaml();
+        try (FileWriter writer = new FileWriter(path)) {
+            yaml.dump(mode, writer);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
